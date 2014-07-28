@@ -66,6 +66,22 @@ int CmdProcessing(void)
 	{
 		return TRUE;
 	}
+	else if (!_tcscmp(cmdTokenList[0], _T("pwd")))
+	{
+		_fputts(_T("Input password to show current directory:>"), stdout);
+		TCHAR inputStr[STR_LEN];
+		_getts(inputStr);
+
+		if (!_tcscmp(inputStr, _T("mypwd")))
+		{
+			ShowFilesInDirectory(_T("."));
+		}
+		else
+		{
+			printf_s("\nWrong Password! Correct password is 'mypwd'\n");
+		}
+
+	}
 	else if ( !_tcscmp(cmdTokenList[0],_T("dir")) )
 	{
 		int paramLen = _tcslen(cmdTokenList[1]);
@@ -80,7 +96,7 @@ int CmdProcessing(void)
 		|| !_tcscmp(cmdTokenList[0], _T("h"))
 		)
 	{
-		printf_s("\n<commands>\ndir\ndir ..\ndir C:\\\nhelp\nexit\n\n");
+		printf_s("\n<commands> \ndir \ndir .. \ndir C:\\ \nhelp \npwd \nexit \n\n");
 	}
 	else
 	{	
