@@ -1,4 +1,5 @@
 #define _CRT_SECURE_NO_WARNINGS
+#define _CRT_NON_CONFORMING_SWPRINTFS
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -53,6 +54,10 @@ int CmdProcessing(void)
 
 	TCHAR * token = _tcstok(cmdString, seps);
 
+	TCHAR cmdStringWithOptions[STR_LEN] = { 0, };
+	TCHAR optString[STR_LEN] = { 0, };
+
+
 	int tokenNum = 0;
 	while(token != NULL)
 	{
@@ -96,16 +101,66 @@ int CmdProcessing(void)
 		|| !_tcscmp(cmdTokenList[0], _T("h"))
 		)
 	{
-		printf_s("\n<commands> \ndir \ndir .. \ndir C:\\ \nhelp \npwd \nexit \n\n");
+		printf_s("\n<commands> \nexplorer c:\\  \ndir \ndir .. \ndir C:\\ \nhelp \npwd \nexit \n\n");
 	}
 	else
 	{	
-		STARTUPINFO si={0,};
-		PROCESS_INFORMATION pi;	
-		si.cb=sizeof(si);
-		BOOL isRun = CreateProcess(NULL, cmdTokenList[0], NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi);
+		BOOL isRun;
+		STARTUPINFO si = { 0, };
+		PROCESS_INFORMATION pi;
+		si.cb = sizeof(si);
 
-		if(isRun == FALSE)
+		_tcscpy(cmdStringWithOptions, cmdTokenList[0]);
+
+		for (int i = 1; i<tokenNum; i++)
+			_swprintf(cmdStringWithOptions, _T("%s %s"), cmdStringWithOptions, cmdTokenList[i]);
+
+		isRun = CreateProcess(NULL, cmdStringWithOptions, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi);
+
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+
+		if (isRun == FALSE)
+			_tprintf(ERROR_CMD, cmdTokenList[0]);
+	}
+
+	return 0;
+}
+
+int CmdProcessing(int tokenNum)
+{
+	BOOL isRun;
+	STARTUPINFO si = { 0, };
+	PROCESS_INFORMATION pi;
+
+	TCHAR cmdStringWithOptions[STR_LEN] = { 0, };
+	TCHAR optString[STR_LEN] = { 0, };
+
+	si.cb = sizeof(si);
+	if (!_tcscmp(cmdTokenList[0], _T("exit")))
+	{
+		return TRUE;
+	}
+	else if (!_tcscmp(cmdTokenList[0], _T("echo")))
+	{
+		for (int i = 1; i<tokenNum; i++)
+			_stprintf(optString, _T("%s %s"), optString, cmdTokenList[i]);
+
+		_tprintf(_T("echo message:%s \n"), optString);
+	}
+	else
+	{
+		_tcscpy(cmdStringWithOptions, cmdTokenList[0]);
+
+		for (int i = 1; i<tokenNum; i++)
+			_stprintf(cmdStringWithOptions, _T("%s %s"), cmdStringWithOptions, cmdTokenList[i]);
+
+		isRun = CreateProcess(NULL, cmdStringWithOptions, NULL, NULL, TRUE, 0, NULL, NULL, &si, &pi);
+
+		CloseHandle(pi.hProcess);
+		CloseHandle(pi.hThread);
+
+		if (isRun == FALSE)
 			_tprintf(ERROR_CMD, cmdTokenList[0]);
 	}
 
