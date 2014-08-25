@@ -4,12 +4,8 @@
 #include <tchar.h>
 #include <locale.h>
 #include <windows.h> 
-#include <tlhelp32.h>
-#include <string>
 
 #include "global.h"
-#include "process.h"
-#include "dir.h"
 #include "command.h"
 
 
@@ -27,7 +23,7 @@ int _tmain(int argc, TCHAR * argv[])
 		CmdProcessing(argc - 1);
 	}
 
-	DWORD isExit = NULL;
+	int isExit = NULL;
 	while (1)
 	{
 		int tokenNum = CmdReadTokenize();
