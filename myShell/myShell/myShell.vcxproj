@@ -78,7 +78,17 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="command.cpp" />
+    <ClCompile Include="dir.cpp" />
+    <ClCompile Include="global.cpp" />
     <ClCompile Include="MyShell.cpp" />
+    <ClCompile Include="process.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="command.h" />
+    <ClInclude Include="dir.h" />
+    <ClInclude Include="global.h" />
+    <ClInclude Include="process.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
