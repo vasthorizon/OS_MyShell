@@ -59,6 +59,22 @@ int CmdProcessing(int tokenNum)
 		CloseHandle(pi.hProcess);
 		CloseHandle(pi.hThread);
 	}
+	else if (!_tcscmp(cmdTokenList[0], _T("mkdir")))
+	{
+		CreateNewDirectory(cmdTokenList[1]);
+	}
+	else if (!_tcscmp(cmdTokenList[0], _T("rmdir")))
+	{
+		RemoveExistingDirectory(cmdTokenList[1]);
+	}
+	else if (!_tcscmp(cmdTokenList[0], _T("ren")))
+	{
+		RenameExistingFile(cmdTokenList[1], cmdTokenList[2]);
+	}
+	else if (!_tcscmp(cmdTokenList[0], _T("del")))
+	{
+		RemoveExistingFile(cmdTokenList[1]);
+	}
 	else if (!_tcscmp(cmdTokenList[0], _T("echo")))
 	{
 		for (int i = 1; i<tokenNum; i++)
@@ -96,7 +112,7 @@ int CmdProcessing(int tokenNum)
 		|| !_tcscmp(cmdTokenList[0], _T("h"))
 		)
 	{
-		printf_s("\n<commands>\nkillprocess(kp) explorer.exe \nlistproc(lp) \necho \nexplorer c:\\  \ndir \ndir .. \ndir C:\\ \nhelp \npwd \nexit \nstart \n\n");
+		printf_s("\n<commands>\nkillprocess(kp) explorer.exe \nlistproc(lp) \necho \nexplorer c:\\  \ndir \ndir .. \ndir C:\\ \nhelp \npwd \nexit \nstart \nrmdir \nmkdir \n\n");
 	}
 	else if (!_tcscmp(cmdTokenList[0], _T("listproc"))
 		|| !_tcscmp(cmdTokenList[0], _T("lp")))
